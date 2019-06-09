@@ -10,13 +10,13 @@ class CategoryModel(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50))
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
+    date_updated = db.Column(db.DateTime, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     __table_args__ = (db.UniqueConstraint(
         'user_id', 'name', name='unq_b_name'),)
 
-    def __init__(self, name, desc, user_id):
+    def __init__(self, name, user_id):
         self.name = name
-        self.desc = desc
         self.user_id = user_id
 
     def save(self):
@@ -38,7 +38,7 @@ class CategoryModel(db.Model):
         CategoryModel.query.all()
 
     def delete(self):
-        """Delete Shoppinglist"""
+        """Delete Category"""
         db.session.delete(self)
         db.session.commit()
 
