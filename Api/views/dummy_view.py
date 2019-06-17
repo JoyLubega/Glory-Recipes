@@ -1,6 +1,6 @@
 from ..api import app
+from ..error_handlers import *
 
-@app.route('/')
 @app.route('/index')
 def index():
-    return "Hello, World!"
+    return "Welcome to Glory Recipes!"

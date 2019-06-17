@@ -1,5 +1,7 @@
 from datetime import datetime
 
+
+
 from Api.api import db
 
 class CategoryModel(db.Model):
@@ -8,16 +10,18 @@ class CategoryModel(db.Model):
     """
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), unique=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     date_updated = db.Column(db.DateTime, default=datetime.utcnow())
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    __table_args__ = (db.UniqueConstraint(
-        'user_id', 'name', name='unq_b_name'),)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False,)
+    parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable= True)
+    children = db.relationship("CategoryModel")
+    
 
-    def __init__(self, name, user_id):
+    def __init__(self, name, created_by, parent_id):
         self.name = name
-        self.user_id = user_id
+        self.created_by= created_by
+        self.parent_id = parent_id
 
     def save(self):
         """

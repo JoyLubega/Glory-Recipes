@@ -12,6 +12,7 @@ class RecipeModel(db.Model):
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     date_updated = db.Column(db.DateTime, default=datetime.utcnow())
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    recipe_text = db.Column(db.String(100))
     __table_args__ = (db.UniqueConstraint(
         'category_id', 'name', name='unq_i_name'),)
 
