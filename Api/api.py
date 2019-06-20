@@ -1,13 +1,11 @@
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 from config import application_config
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
+
 
 db = SQLAlchemy()
-from .models.category import CategoryModel
-from .models.recipes import RecipeModel
-from .models.user import UserModel
-from .models.comments import CommentsModel
+
 
 def create_app(config_name):
     app = FlaskAPI(__name__, instance_relative_config=True)
@@ -17,5 +15,7 @@ def create_app(config_name):
 
     return app
 
+
 app = create_app('ProductionEnv')
-from .views import dummy_view, user_views, category_views
+
+from .views import dummy_view, user_views, category_views # noqa F401
