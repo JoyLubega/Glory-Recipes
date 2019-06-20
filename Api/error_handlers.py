@@ -1,5 +1,5 @@
 from flask import jsonify
-from Api.api import app
+from Api.views.user_views import app
 
 '''
  201  ok resulting to  creation of something
@@ -18,11 +18,12 @@ from Api.api import app
     is the preferred encoding for e-mail and web pages
 '''
 
-# 404 error handler
+
 @app.errorhandler(404)
 def page_not_found(e):
     response = jsonify(
-        {'error': 'The request can not be linked to, Please check your endpoint url'} # noqa E501
+        {'error': 'The request can not be linked to,\
+            Please check your endpoint url'}
         )
     response.status_code = 404
     return response
@@ -33,7 +34,8 @@ def page_not_found(e):
 def method_not_allowed(e):
     response = jsonify(
         {
-            'error': 'Invalid request method. Please check the request method being used' # noqa E501
+            'error': 'Invalid request method.\
+                Please check the request method being used'
         })
     response.status_code = 405
     return response

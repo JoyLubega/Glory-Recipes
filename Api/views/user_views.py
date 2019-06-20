@@ -1,7 +1,7 @@
 from flask import request
 
 from ..api import app
-from ..error_handlers import * # noqa F401
+from ..error_handlers import *
 from Api.contollers.users import Authentication
 from Api.auth_handlers import authentication_success, invalid_key_data
 
@@ -38,3 +38,40 @@ def login():
 
     except KeyError:
         return invalid_key_data()
+
+
+@app.route('/auth/users', methods=['GET'])
+def get_users():
+    """Method to handle get all users"""
+    try:
+        user = Authentication()
+        response = user.get_all_users()
+        return response
+
+    except KeyError:
+        return ("Bad data")
+
+
+@app.route('/auth/user/<int:id>', methods=['DELETE'])
+def delete_users(id):
+    """Method to handle delete a user"""
+    try:
+        user = Authentication()
+        response = user.delete_user(id)
+        return response
+
+    except KeyError:
+        return ("Bad data")
+
+
+@app.route('/auth/user/<int:id>', methods=['PUT'])
+def update_user(id):
+    """Method to handle update a user"""
+    try:
+        data = request.get_json() or {}
+        user = Authentication()
+        response = user.update_user(id, data)
+        return response
+
+    except KeyError:
+        return ({"Error": "An error occured"})

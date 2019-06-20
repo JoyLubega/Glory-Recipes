@@ -2,7 +2,7 @@ HOST=127.0.0.1
 TEST_PATH=./
 
 lint:
-	flake8 --exclude=.tox
+	pep8 Api/ --exclude=.tox
 
 test:
 	pytest --cov=Api Api/tests

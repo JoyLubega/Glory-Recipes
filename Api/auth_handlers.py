@@ -2,7 +2,7 @@ import datetime
 import jwt
 from flask import json, jsonify
 
-from Api.api import app
+from Api.views.user_views import app
 
 
 def encode_auth_token(user_id):

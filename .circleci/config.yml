@@ -7,9 +7,7 @@ jobs:
   build:
     environment:
       CC_TEST_REPORTER_ID: 328e0f1a4e8000e5ecb2944b5f5a68b7870efa94fbdedced78a212a2e316d7d2
-    branches:
-      only:
-        - ft-166540411-SetUp-Project
+    
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -54,7 +52,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            flake8 --exclude=./venv,migrations
+            pycodestyle / --exclude=./venv,migrations
             pytest --cov=Api Api/tests/
             coveralls
             

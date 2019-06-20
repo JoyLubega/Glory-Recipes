@@ -1,6 +1,7 @@
 import unittest
 
-from ..api import app, db
+from ..api import db
+from run import app
 from config import application_config
 
 

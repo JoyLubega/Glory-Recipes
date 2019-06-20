@@ -141,9 +141,10 @@ class UserTestcase(BaseUser):
         })
         response = self.client.post('/auth/login', data=user)
         self.assertEqual(response.status_code, 401)
-        self.assertIn('Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com', response.data.decode()) # noqa E501
+        msg = 'Invalid email!'
+        self.assertIn(msg, response.data.decode())
 
-    def test_login_with_empty_filelds(self):
+    def test_login_with_empty_fields(self):
         """Return 401, user doesnot exist"""
         self.test_success_registration()
         user = json.dumps({
@@ -154,7 +155,7 @@ class UserTestcase(BaseUser):
         self.assertEqual(response.status_code, 400)
         self.assertIn('Missing login credentials', response.data.decode())
 
-    def test_login_with_no_filelds(self):
+    def test_login_with_no_fields(self):
         """Return 401, fields do not exist"""
         self.test_success_registration()
         user = json.dumps({
@@ -164,6 +165,53 @@ class UserTestcase(BaseUser):
         response = self.client.post('/auth/login', data=user)
         self.assertEqual(response.status_code, 401)
         self.assertIn('Check the keys and try again', response.data.decode())
+
+    def test_get_all_users(self):
+        """Return 201 and all users in the database"""
+        self.test_success_registration()
+        response = self.client.get('/auth/users')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('test_user@gmail.com', response.data.decode())
+
+    def test_get_all_users_no_users(self):
+        """Return 201 and all users in the database"""
+        response = self.client.get('/auth/users')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('No Users found', response.data.decode())
+
+    def test_delete_a_user(self):
+        """Return 200 """
+        self.test_success_registration()
+        response = self.client.delete('/auth/user/1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('User deleted', response.data.decode())
+
+    def test_delete_a_user_who_doesnt_exist(self):
+        """Return 400 """
+        self.test_success_registration()
+        response = self.client.delete('/auth/user/100')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('User doesnot exist', response.data.decode())
+
+    def test_update_success(self):
+        """Return 200 """
+        self.test_success_registration()
+        data = json.dumps({
+            "name": "Joy"
+        })
+        response = self.client.put('/auth/user/1', data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('User has been successfully updated',
+                      response.data.decode())
+
+    def test_update_a_user_invalid_user(self):
+        """Return 400 """
+        self.test_success_registration()
+        data = json.dumps({
+            "name": "you"
+        })
+        response = self.client.put('/auth/user/100', data=data)
+        self.assertIn('The user does not exist', response.data.decode())
 
     def tearDown(self):
         with app.app_context():

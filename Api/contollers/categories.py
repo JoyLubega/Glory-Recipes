@@ -12,12 +12,11 @@ class Category(object):
     """
 
     @staticmethod
-    def create_category(name, user_id, parent_id):
+    def create_category(name, parent_id):
         """
         Creates a new recipe category
         :param name:
-        :param user_id:
-        :return:
+        :return: object
         """
         if not name:
             response = jsonify({'Error': 'Missing name'})
@@ -46,26 +45,26 @@ class Category(object):
             return response
 
         category = CategoryModel(
-            name=name, created_by=user_id, parent_id=parent_id)
+            name=name, parent_id=parent_id)
         try:
             category.save()
             response = jsonify({
                 'id': category.id,
                 'name': category.name,
                 'date_added': category.date_added,
-                'created_by': category.created_by,
                 'parent_id': category.parent_id
             })
             response.status_code = 201
             return response
         except Exception:
             response = jsonify(
-                {'Error': 'Category' + category.name.capitalize() + 'already exists, add a sub category to it'}) # noqa E501
+                {'Error': 'Category' + category.name.capitalize() + 'already \
+                            exists, add a sub category to it'})
             response.status_code = 409
             return response
 
     @staticmethod
-    def get_categories(user_id, search, limit):
+    def get_categories(search, limit):
         """
         Gets all recipe categories
         :param user_id:
@@ -74,8 +73,7 @@ class Category(object):
         """
         page = request.args.get('page', 1, type=int)
 
-        response = CategoryModel.query.filter_by(
-            created_by=user_id).limit(limit).all()
+        response = CategoryModel.query.limit(limit).all()
         if not response:
             response = jsonify([])
             response.status_code = 400
@@ -84,11 +82,10 @@ class Category(object):
             results = []
 
             if search:
-                categories = CategoryModel.query.filter_by(
-                    created_by=user_id).filter(
+                categories = CategoryModel.query.filter(
                         CategoryModel.name.ilike('%{0}%'.format(search)))
             else:
-                categories = CategoryModel.query.filter_by(created_by=user_id)
+                categories = CategoryModel.query.order_by(CategoryModel.id)
 
             if categories:
 
@@ -110,7 +107,6 @@ class Category(object):
                         obj = {
                             'id': cat.id,
                             'name': cat.name,
-                            'created_by': cat.created_by,
                             'date_created': cat.date_added,
                             'parent_id': cat.parent_id,
                         }

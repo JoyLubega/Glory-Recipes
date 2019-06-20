@@ -41,4 +41,5 @@ class ReviewsModel(db.Model):
         return (
             "<Comment: {}>",
             "<Rate: {}>",
-            "<recipe_id: {}>".format(self.comment_text, self.rate, self.recipe_id)) # noqa E501
+            "<recipe_id: {}>".format(self.comment_text, self.rate,
+                                     self.recipe_id))
