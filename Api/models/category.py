@@ -12,15 +12,12 @@ class CategoryModel(db.Model):
     name = db.Column(db.String(50), unique=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     date_updated = db.Column(db.DateTime, default=datetime.utcnow())
-    created_by = db.Column(
-        db.Integer, db.ForeignKey('users.id'), nullable=False,)
     parent_id = db.Column(
         db.Integer, db.ForeignKey('categories.id'), nullable=True)
     children = db.relationship("CategoryModel")
 
-    def __init__(self, name, created_by, parent_id):
+    def __init__(self, name, parent_id):
         self.name = name
-        self.created_by = created_by
         self.parent_id = parent_id
 
     def save(self):

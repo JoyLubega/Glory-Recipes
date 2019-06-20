@@ -1,5 +1,7 @@
 import re
 from flask import jsonify
+from email_validator import validate_email, EmailNotValidError
+
 from ..models.user import UserModel
 
 
@@ -28,11 +30,13 @@ class Authentication(object):
             response = jsonify({'Error': 'Numbers cant be a Name'})
             response.status_code = 400
             return response
-
-        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):  # noqa E501
+        match = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        if not re.match(match, email):
             response = jsonify(
-                {'message':
-                 'Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com'}  # noqa E501
+                {
+                    'message': 'Invalid email! A valid email should in this'
+                               'format me.name@gmail.com'
+                }
             )
             response.status_code = 400
             return response
@@ -82,11 +86,13 @@ class Authentication(object):
             response = jsonify({'Error': 'Missing login credentials'})
             response.status_code = 400
             return response
-
-        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):  # noqa E501
+        match = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        if not re.match(match, email):
             response = jsonify(
-                {'message':
-                 'Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com'} # noqa E501
+                {
+                    'message': 'Invalid email! A valid email should '
+                               'in this format me.name@gmail.com'
+                }
             )
             response.status_code = 401
             return response
@@ -107,3 +113,98 @@ class Authentication(object):
         response = jsonify({'Error': 'Incorrect email or password'})
         response.status_code = 401
         return response
+
+    @staticmethod
+    def get_all_users():
+        """
+        Gets all users in the database
+        :param: user_id
+        :return: str
+        """
+        response = UserModel.query.all()
+        if not response:
+            response = jsonify({
+                "message": "No Users found"
+            })
+            response.status_code = 400
+            return response
+        else:
+            all_users = []
+            for data in response:
+                users = {
+                    "id": data.id,
+                    "name": data.name,
+                    "email": data.email
+                }
+                all_users.append(users)
+            response = jsonify(all_users)
+            return response
+
+    @staticmethod
+    def delete_user(user_id):
+        """
+        Delete a user from the database
+        :return:
+        """
+        response = UserModel.query.filter_by(id=user_id).first()
+        if not response:
+            response = jsonify({
+                "Error": "User doesnot exist"
+            })
+            response.status_code = 400
+            return response
+        else:
+            response.delete()
+            message = jsonify({
+                "Msg": "User deleted"
+            })
+            return message
+
+    @staticmethod
+    def update_user(user_id, data):
+        """
+        Updates User details
+
+        :param user_id:
+        :param name:
+        :param email:
+        """
+
+        user = UserModel.query.filter_by(id=user_id).first()
+
+        if user:
+            if 'name' in data:
+                if data['name'] != user.name and \
+                        UserModel.query.filter_by(name=data['name']).first():
+
+                    return jsonify({'msg': 'please use a different username'})
+                else:
+                    user.name = data['name']
+
+            if 'email' in data:
+                if data['email'] != user.email and \
+                        UserModel.query.filter_by(email=data['email']).first():
+                    return jsonify({'msg': 'please use a different email'})
+                else:
+                    try:
+                        is_valid = validate_email(data['email'])
+                        if is_valid['email']:
+                            user.email = data['email']
+                    except EmailNotValidError as e:
+                        return ({"Error": str(e)})
+
+            user.update()
+            User = UserModel.query.filter_by(id=user_id).first()
+            result = {
+                        'id': User.id,
+                        'name': User.name,
+                        'email': User.email
+                        }
+            response = jsonify(
+                {'message': 'User has been successfully updated',
+                 'user': result
+                 })
+            response.status_code = 200
+            return response
+        else:
+            return jsonify({"Error": "The user does not exist"})

@@ -1,7 +1,7 @@
 from flask import request
 
 from ..api import app
-from ..error_handlers import * # noqa F401
+from ..error_handlers import *
 from ..auth_handlers import decode_auth_token, invalid_token, invalid_key_data
 from Api.contollers.categories import Category
 
@@ -18,7 +18,7 @@ def add_category():
             category_name = name.lower()
             category = Category()
             response = category.create_category(
-                category_name, user_id, parent_id)
+                category_name, parent_id)
             return response
 
         return invalid_token()
@@ -39,9 +39,9 @@ def get_categories():
             category = Category()
             if limit:
                 limit = int(limit)
-                response = category.get_categories(user_id, search, limit)
+                response = category.get_categories(search, limit)
                 return response
-            response = category.get_categories(user_id, search, limit)
+            response = category.get_categories(search, limit)
             return response
 
         else:

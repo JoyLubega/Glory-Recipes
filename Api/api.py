@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from config import application_config
 from flask_cors import CORS
 
-
 db = SQLAlchemy()
 
 
@@ -15,7 +14,4 @@ def create_app(config_name):
 
     return app
 
-
 app = create_app('ProductionEnv')
-
-from .views import dummy_view, user_views, category_views # noqa F401

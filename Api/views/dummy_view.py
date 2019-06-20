@@ -1,5 +1,5 @@
 from ..api import app
-from ..error_handlers import * # noqa F401
+from ..error_handlers import *
 
 
 @app.route('/index')

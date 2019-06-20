@@ -1,8 +1,6 @@
 from Api.api import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .category import CategoryModel # noqa F401
-
 
 class UserModel(db.Model):
     """
@@ -13,8 +11,7 @@ class UserModel(db.Model):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(200))
-    categories = db.relationship(
-        'CategoryModel', backref='user', lazy='dynamic', cascade='delete')
+    status = db.Column(db.String(100))
 
     def __init__(self, email, password, name=None):
         self.email = email
