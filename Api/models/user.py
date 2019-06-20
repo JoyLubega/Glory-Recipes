@@ -1,10 +1,7 @@
-from datetime import datetime
 from Api.api import db
-from werkzeug.security import generate_password_hash, \
-    check_password_hash
-from sqlalchemy import UniqueConstraint
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from .category import CategoryModel
+from .category import CategoryModel # noqa F401
 
 
 class UserModel(db.Model):

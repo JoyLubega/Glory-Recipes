@@ -1,7 +1,7 @@
-from flask import request, jsonify, json
+from flask import request
 
 from ..api import app
-from ..error_handlers import *
+from ..error_handlers import * # noqa F401
 from Api.contollers.users import Authentication
 from Api.auth_handlers import authentication_success, invalid_key_data
 
@@ -21,8 +21,9 @@ def register():
         return response
 
     except KeyError:
-         return invalid_key_data()
-    
+        return invalid_key_data()
+
+
 @app.route('/auth/login', methods=['POST'])
 def login():
     """Method to handle user login"""

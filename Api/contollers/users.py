@@ -1,6 +1,5 @@
 import re
 from flask import jsonify
-from validate_email import validate_email
 from ..models.user import UserModel
 
 
@@ -10,16 +9,15 @@ class Authentication(object):
     """
 
     @staticmethod
-    
     def register(email, password, name):
         """
         Registers a new user to the application
         and returns an API response with status
         code set to 201 on success
-        
-        :param email: 
-        :param password: 
-        :param name:  
+
+        :param email:
+        :param password:
+        :param name:
         """
         if not name or not email or not password:
             response = jsonify({'Error': 'Missing Values'})
@@ -31,34 +29,31 @@ class Authentication(object):
             response.status_code = 400
             return response
 
-        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):
+        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):  # noqa E501
             response = jsonify(
-            {'message':
-            'Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com' }
+                {'message':
+                 'Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com'}  # noqa E501
             )
-            response.status_code = 401
+            response.status_code = 400
             return response
-
 
         if re.match(r"(^[ ]*$)", name):
             response = jsonify(
-            {'message':
-            'A space is not a name' }
+                {'message':
+                 'A space is not a name'}
             )
-            response.status_code = 401
+            response.status_code = 400
             return response
-
 
         if not re.match(r"(^[a-zA-Z_ ]*$)", name):
             response = jsonify(
-            {'message':
-            'Name should be in alphabetical' }
+                {'message':
+                 'Name should be in alphabetical'}
             )
-            response.status_code = 401
+            response.status_code = 400
             return response
 
         user = UserModel(email=email, password=password, name=name)
-
 
         if user.query.filter_by(email=email).first():
             response = jsonify({'Error': 'Email Already exists'})
@@ -79,19 +74,19 @@ class Authentication(object):
         logs in an existing user to the application
         and returns an API response with status
         code set to 201 on success
-        
-        :param email: 
-        :param password:  
+
+        :param email:
+        :param password:
         """
         if not email or not password:
             response = jsonify({'Error': 'Missing login credentials'})
             response.status_code = 400
             return response
 
-        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):
+        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):  # noqa E501
             response = jsonify(
-            {'message':
-            'Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com' }
+                {'message':
+                 'Invalid email! A valid email should in this format me.name@gmail.com or joyce.namuli@andela.com'} # noqa E501
             )
             response.status_code = 401
             return response
@@ -112,4 +107,3 @@ class Authentication(object):
         response = jsonify({'Error': 'Incorrect email or password'})
         response.status_code = 401
         return response
-    

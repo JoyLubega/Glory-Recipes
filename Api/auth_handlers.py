@@ -4,16 +4,15 @@ from flask import json, jsonify
 
 from Api.api import app
 
+
 def encode_auth_token(user_id):
-    
     """
     Generates the Auth Token
     :return: string
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() +
-                   datetime.timedelta(days=90),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=90),
             'iat': datetime.datetime.utcnow(),
             'sub': user_id
         }
@@ -33,7 +32,8 @@ def decode_auth_token(token):
     :return: integer|string
     """
     try:
-        payload = jwt.decode(token, app.config.get('SECRET_KEY'), algorithms=['HS256'])
+        payload = jwt.decode(
+            token, app.config.get('SECRET_KEY'), algorithms=['HS256'])
         return payload['sub']
     except jwt.ExpiredSignatureError:
         response = jsonify({
@@ -49,19 +49,21 @@ def decode_auth_token(token):
         response.status_code = 401
         return response
 
+
 def authentication_success(response):
     if response.status_code == 201:
         data = json.loads(response.data.decode())
         data['token'] = encode_auth_token(data['token']).decode()
         response = jsonify(data)
-        
         response.status_code = 201
     return response
+
 
 def invalid_key_data():
     response = jsonify({'Error': 'Check the keys and try again'})
     response.status_code = 401
     return response
+
 
 def invalid_token():
     response = jsonify({'Error': 'Token not found'})
