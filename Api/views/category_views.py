@@ -15,10 +15,9 @@ def add_category():
         if isinstance(user_id, int):
             name = request.json['name']
             parent_id = request.json.get('parent_id')
-            category_name = name.lower()
             category = Category()
             response = category.create_category(
-                category_name, parent_id)
+                name, parent_id)
             return response
 
         return invalid_token()
@@ -30,22 +29,44 @@ def add_category():
 @app.route('/categories', methods=['GET'])
 def get_categories():
     """Method to handle getting all recipe categories"""
-    try:
-        user_id = decode_auth_token(request.headers.get("Authorization"))
-        if isinstance(user_id, int):
-            limit = request.args.get('limit', 5, int)
-            search = request.args.get("q", "")
+    user_id = decode_auth_token(request.headers.get("Authorization"))
+    if isinstance(user_id, int):
+        limit = request.args.get('limit', 5, int)
+        search = request.args.get("q", "")
 
-            category = Category()
-            if limit:
-                limit = int(limit)
-                response = category.get_categories(search, limit)
-                return response
+        category = Category()
+        if limit:
+            limit = int(limit)
             response = category.get_categories(search, limit)
             return response
+        response = category.get_categories(search, limit)
+        return response
 
-        else:
-            return invalid_token()
+    else:
+        return invalid_token()
 
-    except KeyError:
-        return ("Bad request")
+
+@app.route('/categories/<int:id>', methods=['GET'])
+def get_a_category(id):
+    """Method to handle get a single category"""
+    user_id = decode_auth_token(request.headers.get("Authorization"))
+    if isinstance(user_id, int):
+        category = Category()
+        response = category.get_single_category(id)
+        return response
+
+    else:
+        return invalid_token()
+
+
+@app.route('/categories/<int:id>', methods=['DELETE'])
+def delete_a_category(id):
+    """Method to handle delete a single category"""
+    user_id = decode_auth_token(request.headers.get("Authorization"))
+    if isinstance(user_id, int):
+        category = Category()
+        response = category.delete_category(id)
+        return response
+
+    else:
+        return invalid_token()

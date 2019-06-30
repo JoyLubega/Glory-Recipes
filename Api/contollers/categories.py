@@ -20,12 +20,12 @@ class Category(object):
         """
         if not name:
             response = jsonify({'Error': 'Missing name'})
-            response.status_code = 404
+            response.status_code = 400
             return response
 
         if type(name) is int:
             response = jsonify({'Error': 'Numbers cant be a Name'})
-            response.status_code = 401
+            response.status_code = 400
             return response
 
         if not re.match(r"(^[a-zA-Z_ ]*$)", name):
@@ -33,7 +33,7 @@ class Category(object):
                 {'message':
                  'Name should be in alphabetical'}
             )
-            response.status_code = 401
+            response.status_code = 400
             return response
 
         if re.match(r"(^[ ]*$)", name):
@@ -41,11 +41,11 @@ class Category(object):
                 {'message':
                  'A space is not a name'}
             )
-            response.status_code = 401
+            response.status_code = 400
             return response
-
+        category_name = name.lower()
         category = CategoryModel(
-            name=name, parent_id=parent_id)
+            name=category_name, parent_id=parent_id)
         try:
             category.save()
             response = jsonify({
@@ -58,8 +58,10 @@ class Category(object):
             return response
         except Exception:
             response = jsonify(
-                {'Error': 'Category' + category.name.capitalize() + 'already \
-                            exists, add a sub category to it'})
+                {
+                    'Error': 'Name ' + category.name.capitalize() + ' exists'
+                }
+            )
             response.status_code = 409
             return response
 
@@ -75,7 +77,7 @@ class Category(object):
 
         response = CategoryModel.query.limit(limit).all()
         if not response:
-            response = jsonify([])
+            response = jsonify({"Msg": "No categories found"})
             response.status_code = 400
             return response
         else:
@@ -121,3 +123,57 @@ class Category(object):
                     return response
                 else:
                     return {'message': 'No Categories to display'}, 404
+
+    @staticmethod
+    def get_single_category(category_id):
+        """
+        Gets single category
+        :param category_id:
+        """
+        category = CategoryModel.query.filter_by(id=category_id).first()
+        if not category:
+            response = jsonify({
+                'error': 'category with id: ' +
+                         str(category_id) + ' is not found'
+            })
+            response.status_code = 404
+            return response
+
+        category_data = {
+            'id': category.id,
+            'name': category.name,
+            'Parent': category.parent_id,
+            'date_added': category.date_added,
+
+        }
+        response = jsonify(category_data)
+        response.status_code = 200
+        return response
+
+    @staticmethod
+    def delete_category(category_id):
+        """
+        Delete single category
+        :param category_id:
+        """
+        category = CategoryModel.query.filter_by(id=category_id).first()
+        if not category:
+            response = jsonify({
+                'error': 'category with id: ' +
+                         str(category_id) + ' is not found'
+            })
+            response.status_code = 404
+            return response
+        else:
+            category.delete()
+            category_data = {
+                'id': category.id,
+                'name': category.name,
+                'Parent': category.parent_id,
+                'date_added': category.date_added,
+
+            }
+            response = jsonify({"msg": "category deleted permanently",
+                                "data": category_data})
+            response.status_code = 200
+            return response
