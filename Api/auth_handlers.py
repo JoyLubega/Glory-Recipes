@@ -61,7 +61,7 @@ def authentication_success(response):
 
 def invalid_key_data():
     response = jsonify({'Error': 'Check the keys and try again'})
-    response.status_code = 401
+    response.status_code = 400
     return response
 
 

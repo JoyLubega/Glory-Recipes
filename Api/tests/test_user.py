@@ -87,7 +87,7 @@ class UserTestcase(BaseUser):
 
         })
         response = self.client.post('/auth/register', data=user)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertIn("Check the keys and try again", response.data.decode())
 
     def test_registration_with_existing_email(self):
@@ -163,7 +163,7 @@ class UserTestcase(BaseUser):
             'password': ''
         })
         response = self.client.post('/auth/login', data=user)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertIn('Check the keys and try again', response.data.decode())
 
     def test_get_all_users(self):
