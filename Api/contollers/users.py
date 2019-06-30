@@ -141,6 +141,30 @@ class Authentication(object):
             return response
 
     @staticmethod
+    def get_single_user(user_id):
+        """
+        Gets single user using ID
+        :param user_id:
+        """
+        user = UserModel.query.filter_by(id=user_id).first()
+        if not user:
+            response = jsonify({
+                'error': 'User with id: ' + str(user_id) + ' is not found'
+            })
+            response.status_code = 404
+            return response
+
+        user_data = {
+            'id': user.id,
+            'name': user.name,
+            'email': user.email,
+            'status': user.status,
+        }
+        response = jsonify(user_data)
+        response.status_code = 200
+        return response
+
+    @staticmethod
     def delete_user(user_id):
         """
         Delete a user from the database

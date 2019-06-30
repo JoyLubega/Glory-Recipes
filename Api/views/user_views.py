@@ -52,6 +52,18 @@ def get_users():
         return ("Bad data")
 
 
+@app.route('/auth/users/<int:id>', methods=['GET'])
+def get_a_user(id):
+    """Method to handle get a single user"""
+    try:
+        user = Authentication()
+        response = user.get_single_user(id)
+        return response
+
+    except KeyError:
+        return ("No user Found")
+
+
 @app.route('/auth/user/<int:id>', methods=['DELETE'])
 def delete_users(id):
     """Method to handle delete a user"""

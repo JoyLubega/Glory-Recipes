@@ -173,6 +173,20 @@ class UserTestcase(BaseUser):
         self.assertEqual(response.status_code, 200)
         self.assertIn('test_user@gmail.com', response.data.decode())
 
+    def test_get_a_user(self):
+        """Return 201 for a user in the database"""
+        self.test_success_registration()
+        response = self.client.get('/auth/users/1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('test_user@gmail.com', response.data.decode())
+
+    def test_get_a_user_not_found(self):
+        """Return 404 for a user in the database"""
+        self.test_success_registration()
+        response = self.client.get('/auth/users/100')
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('User with id: 100 is not found', response.data.decode())
+
     def test_get_all_users_no_users(self):
         """Return 201 and all users in the database"""
         response = self.client.get('/auth/users')
