@@ -135,14 +135,6 @@ class CategoryTestcase(BaseCategory):
         self.assertEqual(response.status_code, 200)
         self.assertIn('prev', response.data.decode())
 
-    # def test_get_category_next_page(self):
-    #     """Should return 200 for no categories found"""
-    #     self.test_add_category_success()
-    #     response = self.client.get('/categories?q=a',
-    #                                headers={"Authorization": self.token})
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertIn('asian', response.data.decode())
-
     def test_get_categories_not_found(self):
         """Should return 404 for no categories found"""
         response = self.client.get('/categories',
