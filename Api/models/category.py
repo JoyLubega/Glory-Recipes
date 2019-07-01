@@ -7,13 +7,13 @@ class CategoryModel(db.Model):
     """
     Category database Model
     """
-    __tablename__ = 'categories'
+    __tablename__ = 'categories_table'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     date_updated = db.Column(db.DateTime, default=datetime.utcnow())
     parent_id = db.Column(
-        db.Integer, db.ForeignKey('categories.id'), nullable=True)
+        db.Integer, db.ForeignKey('categories_table.id'), nullable=True)
     children = db.relationship("CategoryModel")
 
     def __init__(self, name, parent_id):
