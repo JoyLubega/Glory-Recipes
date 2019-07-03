@@ -177,3 +177,49 @@ class Category(object):
                                 "data": category_data})
             response.status_code = 200
             return response
+
+    @staticmethod
+    def update_category(category_id, data):
+        """
+        Updates a category
+        :param category_id:
+        :param category_name:
+        :param parent_id:
+        """
+        category = CategoryModel.query.filter_by(id=category_id).first()
+
+        if category:
+            if 'name' in data:
+                if data['name'] != category.name and \
+                        CategoryModel.query.filter_by(
+                            name=data['name']).first():
+
+                    return jsonify({'msg': 'please use a different username'})
+                else:
+                    category.name = data['name']
+
+            if 'parent_id' in data:
+                if data['parent_id'] == category.id:
+                    return jsonify({'msg': 'Can not be a parent to self'})
+                else:
+                    category.parent_id = data['parent_id']
+
+            category.update()
+            Category = CategoryModel.query.filter_by(id=category_id).first()
+            result = {
+                        'id': Category.id,
+                        'name': Category.name,
+                        'Parent': Category.parent_id
+                        }
+            response = jsonify(
+                {
+                    'message': 'Category has been successfully updated',
+                    'category': result
+                }
+            )
+            response.status_code = 200
+            return response
+        else:
+            response = jsonify({"Error": "The category does not exist"})
+            response.status_code = 404
+            return response
