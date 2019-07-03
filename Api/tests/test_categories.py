@@ -219,6 +219,28 @@ class CategoryTestcase(BaseCategory):
         self.assertEqual(response.status_code, 401)
         self.assertIn('Token not found', response.data.decode())
 
+    def test_update_category_success(self):
+        """Return 200 """
+        self.test_add_category_success()
+        data = json.dumps({
+            "name": "African"
+        })
+        response = self.client.put('/categories/1', data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Category has been successfully updated',
+                      response.data.decode())
+
+    def test_update_category_not_found(self):
+        """Return 404 """
+        self.test_add_category_success()
+        data = json.dumps({
+            "name": "African"
+        })
+        response = self.client.put('/categories/100', data=data)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('The category does not exist',
+                      response.data.decode())
+
     def tearDown(self):
         with app.app_context():
             # Drop all tables

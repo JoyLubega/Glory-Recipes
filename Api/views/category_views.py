@@ -70,3 +70,16 @@ def delete_a_category(id):
 
     else:
         return invalid_token()
+
+
+@app.route('/categories/<int:id>', methods=['PUT'])
+def update_category(id):
+    """Method to handle update a user"""
+    try:
+        data = request.get_json() or {}
+        category = Category()
+        response = category.update_category(id, data)
+        return response
+
+    except KeyError:
+        return ({"Error": "An issue with the key"})
