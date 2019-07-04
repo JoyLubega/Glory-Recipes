@@ -60,15 +60,15 @@ You can now run the application using:
 ## API Endpoints
 You can use postman or even curl to reach out to the following api endpoints:
 
-URL Endpoint	|               HTTP Request   | Resource Accessed | Access Type|
-----------------|-----------------|-------------|------------------
-/auth/register   |      POST	| Register a new user|publc
-/auth/login	  |     POST	| Login and retrieve token|public
+URL Endpoint	|               HTTP Request   | Resource Accessed | Access Type| json fields
+----------------|-----------------|-------------|------------------ |------------|
+/auth/register   |      POST	| Register a new user|public| name, email, password
+/auth/login	  |     POST	| Login and retrieve token|public| email, password
 /auth/users   |     GET     | Get all users in the database | public
 /auth/users/<user_id>   |     GET     | Get a user by id in the database | public
 /auth/users/<user_id>   |     PUT     | Update a user in the database | public
 /auth/users/<user_id>   |     DELETE     | Delete a user permanently in the database | public
-/category	              |      POST	|Create a new category|private
+/category	              |      POST	|Create a new category|private| name, Parent_id is optional
 /categories	              |      GET	|     Retrieve all categories|private
 /categories/<category_id>            |  	GET	    | Retrieve a category by ID | private
 /categories/<category_id> 	          |      PUT	|     Update a category |private
