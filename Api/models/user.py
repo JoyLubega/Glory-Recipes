@@ -6,7 +6,7 @@ class UserModel(db.Model):
     """
     User Database model
     """
-    __tablename__ = 'users_table'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
