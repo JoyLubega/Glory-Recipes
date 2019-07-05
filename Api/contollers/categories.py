@@ -69,7 +69,7 @@ class Category(object):
     def get_categories(search, limit):
         """
         Gets all recipe categories
-        :param user_id:
+        :param category_id:
         :param search:
         :return:
         """

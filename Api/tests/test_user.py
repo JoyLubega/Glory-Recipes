@@ -196,7 +196,14 @@ class UserTestcase(BaseUser):
     def test_delete_a_user(self):
         """Return 200 """
         self.test_success_registration()
-        response = self.client.delete('/auth/user/1')
+        user2 = json.dumps({
+            'name': 'test',
+            'email': 'test.com',
+            'password': 'testpassword'
+
+        })
+        self.client.post('/auth/register', data=user2)
+        response = self.client.delete('/auth/user/2')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User deleted', response.data.decode())
 
