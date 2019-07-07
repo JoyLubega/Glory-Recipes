@@ -203,7 +203,7 @@ class UserTestcase(BaseUser):
 
         })
         self.client.post('/auth/register', data=user2)
-        response = self.client.delete('/auth/user/2')
+        response = self.client.delete('/auth/user/1')
         self.assertEqual(response.status_code, 200)
         self.assertIn('User deleted', response.data.decode())
 
