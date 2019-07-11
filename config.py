@@ -1,5 +1,9 @@
 import os
 
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+REDIRECT_URI = '/oauth2callback'  # one of the Redirect URIs
+
 
 class MainConfiguration(object):
     DEBUG = False

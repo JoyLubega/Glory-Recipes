@@ -1,9 +1,12 @@
 from flask import request
+# from flask_oauth import OAuth
 
 from ..api import app
 from ..error_handlers import *
 from Api.contollers.users import Authentication
 from Api.auth_handlers import authentication_success, invalid_key_data
+
+# oauth = OAuth()
 
 
 @app.route('/auth/register', methods=['POST'])

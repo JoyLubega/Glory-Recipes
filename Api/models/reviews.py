@@ -12,8 +12,8 @@ class ReviewsModel(db.Model):
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     date_updated = db.Column(db.DateTime, default=datetime.utcnow())
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
-    comment_text = db.Column(db.String(100))
-    rate = db.Column(db.Integer, nullable=False)
+    comment_text = db.Column(db.String(100), nullable=False, default=u'')
+    rate = db.Column(db.Integer, nullable=False, default=0)
 
     def __init__(self, comment_text, recipe_id, rate):
         self.comment_text = comment_text
@@ -35,6 +35,11 @@ class ReviewsModel(db.Model):
     def delete(self):
         """Delete a reeview"""
         db.session.delete(self)
+        db.session.commit()
+
+    @staticmethod
+    def update():
+        """Update recipes """
         db.session.commit()
 
     def __repr__(self) -> str:

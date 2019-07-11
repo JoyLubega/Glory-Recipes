@@ -1,0 +1,336 @@
+FORMAT: 1A
+HOST:https://gloryrecipe-api.herokuapp.com/
+
+
+# GloryRecipe API
+
+A recipes Api for user to create and re use their recipes.
+
+## Register [/auth/register]
+
+
+### Register a new user [POST]
+
+You may register a new user using this action. It takes a JSON
+object containing a name, email and password
+
++ Request (application/json)
+
+        {
+            "name": "John Doe",
+            "email": "Johndoe@gmail.com",
+            "password": "secret"
+            
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /auth/register
+
+    + Body
+
+            {
+                "Status": "Johndoe@gmail.com Successfully registered",
+                "id": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNSwidXNlcm5hbWUiOiJKb3ljZU5hIiwiZXhwIjoxNTU1NTkzMjQzLCJlbWFpbCI6ImpveWNlQGdtYWlsLmNvbSJ9.12mAeAbbh7CreWjjuUgkpyXJ0Xd9rH_HrynrgKNZrKg"
+            }
+            
+## Login [/auth/login]            
+
+### Login a user [POST]
+
+You may login a user using this action. It takes a JSON
+object containing an email and password
+
++ Request (application/json)
+
+        {
+            "email": "Johndoe@gmail.com",
+            "password": "secret"
+            
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /auth/register
+
+    + Body
+
+            {
+                "Status": "Johndoe@gmail.com Login Successful",
+                "id": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNSwidXNlcm5hbWUiOiJKb3ljZU5hIiwiZXhwIjoxNTU1NTkzMjQzLCJlbWFpbCI6ImpveWNlQGdtYWlsLmNvbSJ9.12mAeAbbh7CreWjjuUgkpyXJ0Xd9rH_HrynrgKNZrKg"
+            }
+            
+        
+## Categories [/category]            
+
+### Add a category [POST]
+
+You add a category using this action. It takes a JSON
+object containing the name of the category and parent_id if its a sub_category and
+Authorization token in header
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token
+    + Body
+
+            {
+                "name": "African"
+                
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /category
+
+    + Body
+
+            {
+                'Status': 'Successfully Added categories',
+                'id': 1
+            }
+
+
+### Retrieve categories [GET]
+
+You can retrieve categories using this action. 
+Request contains Authorization token in header
+
+    + Headers
+
+            Authorization: Token
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /categories
+
+    + Body
+
+            [
+                {
+                    "date_added": "Mon, 07 Aug 2017 01:41:34 GMT",
+                    "name": "African",
+                    "id": 1,
+                    "parent_id": "null"
+                },
+                {
+                    "date_added": "Mon, 07 Aug 2017 01:41:34 GMT",
+                    "id": 2,
+                    "name": "WestAfrican",
+                    "parent_id": 1
+                }
+            ]
+
+
+## Access to categories [/category/id]            
+
+### Retrieve a single category [GET]
+
+You retrieve a single category using this action. 
+Request contains Authorization token in header
+
+    + Headers
+
+            Authorization: Token
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /category/id
+
+    + Body
+
+            {
+                "date_added": "Mon, 07 Aug 2017 01:41:34 GMT",
+                "name": "African",
+                "id": 1,
+                "parent_id": "null"
+            }
+
+### Update a category [PUT]
+
+You update a category using this action. 
+Request contains Authorization token in header
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token
+        
+    + Body
+
+            {
+                "name": "Asian"
+            }
+
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /category/id
+
+    + Body
+
+            {
+                'success': 'The category has been updated',
+                'shoppinglist': 'Sports'
+            }
+
+### Delete a category [DELETE]
+
+You delete a category permanently using this action. 
+Request contains Authorization token in header
+
+
+    + Headers
+
+            Authorization: Token
+        
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /category/id
+
+    + Body
+
+            {
+                'success': 'The category has been deleted permanently'
+            }
+
+## Recipes [/categories/id/recipes]            
+
+### Add a recipe [POST]
+
+You add a recipe using this action. It takes a JSON
+object containing an item name
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token
+    + Body
+
+            {
+                "recipe_text": "Add 2 scoups of icecream",
+                "name_of_recipe": "African icecream"
+
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /categories/id/recipes
+
+    + Body
+
+            {
+                'Status': 'The recipe has been added successfully',
+                'id': 1
+            }
+
+## Recipes [/categories/id/recipes/recipe_id]            
+
+### edit a recipe [PUT]
+
+You edit a recipe using this action. It takes a JSON
+object containing an item name
+
++ Request (application/json)
+
+
+    + Headers
+
+            Authorization: Token
+    + Body
+
+            {
+                "name_of_recipe": "Bibmo"
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /categories/id/recipes/recipe_id
+
+    + Body
+
+            {
+                'Status': 'The recipe has been successfully edited',
+                'item_name': "Go to Silicon Valley"
+            }
+
+### Delete a recipe [DELETE]
+
+You can delete a recipe using this action. It takes a JSON
+object containing an item name
+
+
+    + Headers
+
+            Authorization: Token
+
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /categories/id/recipes/recipe_id
+
+    + Body
+
+            {
+                'success': 'The recipe has been deleted permanently'
+            }
+
+
+## Reviews [/reviews/recipe_id]            
+
+### Add a review [POST]
+
+You add a review using this action. It takes a JSON
+object containing an comment_text
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token
+    + Body
+
+            {
+                "comment_text": "awesome recipe",
+                "rate": 4
+
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /reviews/recipe_id
+
+    + Body
+
+            {
+                'Status': 'The review has been added successfully',
+                'id': 1
+            }
+

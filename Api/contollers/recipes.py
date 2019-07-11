@@ -3,6 +3,7 @@ from flask import jsonify, request
 from Api.models.category import CategoryModel
 from Api.models.recipes import RecipeModel
 from Api.models.user import UserModel
+from Api.models.reviews import ReviewsModel
 from Api.api import db
 
 
@@ -98,14 +99,26 @@ class Recipe(object):
                 else:
                     next = None
                 if recipe_lists:
+
                     for recipe in recipe_lists:
+                        ratings = ReviewsModel.query.with_entities(
+                            ReviewsModel.rate).filter_by(
+                                recipe_id=recipe.id).all()
+
+                        rating = sum([rate[0] for rate in ratings])
+                        if len(ratings) == 0:
+                            av_rating = 0
+                        else:
+                            av_rating = rating/len(ratings)
                         obj = {
                             'id': recipe.id,
                             'name': recipe.name,
                             'date_created': recipe.date_added,
                             'recipe_text': recipe.recipe_text,
                             'user': recipe.user_id,
-                            'category_id': recipe.category_id
+                            'category_id': recipe.category_id,
+                            'score': round(av_rating, 2),
+                            'number_of_ratings': len(ratings)
                         }
                         results.append(obj)
                     response = jsonify({
