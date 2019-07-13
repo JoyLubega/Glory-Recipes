@@ -33,7 +33,7 @@ def decode_auth_token(token):
     """
     try:
         payload = jwt.decode(
-            token, app.config.get('SECRET_KEY'), algorithms=['HS256'])
+            token, app.config.get('SECRET_KEY'), algorithms=['HS256'], verify= False)
         return payload['sub']
     except jwt.ExpiredSignatureError:
         response = jsonify({

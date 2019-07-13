@@ -1,8 +1,14 @@
 import os
 
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
-GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
-REDIRECT_URI = '/oauth2callback'  # one of the Redirect URIs
+GOOGLE_LOGIN_CLIENT_ID = "os.getenv('GOOGLE_CLIENT_ID')"
+GOOGLE_LOGIN_CLIENT_SECRET = "os.getenv('GOOGLE_CLIENT_SECRET')"
+
+OAUTH_CREDENTIALS = {
+        'google': {
+            'id': GOOGLE_LOGIN_CLIENT_ID,
+            'secret': GOOGLE_LOGIN_CLIENT_SECRET
+        }
+}
 
 
 class MainConfiguration(object):

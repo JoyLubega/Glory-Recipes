@@ -29,7 +29,8 @@ def add_category():
 @app.route('/categories', methods=['GET'])
 def get_categories():
     """Method to handle getting all recipe categories"""
-    user_id = decode_auth_token(request.headers.get("Authorization"))
+    user_id = int(decode_auth_token(request.headers.get("Authorization")))
+
     if isinstance(user_id, int):
         limit = request.args.get('limit', 5, int)
         search = request.args.get("q", "")
